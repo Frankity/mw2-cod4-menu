@@ -135,7 +135,7 @@
 			LOCAL_GAMETYPE_SELECTION( 10, "@"+tableLookup( "mp/gametypesTable.csv", 0, "gtnw", 1 ), "gtnw" )\
 			LOCAL_GAMETYPE_SELECTION( 11, "@"+tableLookup( "mp/gametypesTable.csv", 0, "vip", 1 ), "vip" )\
 			LOCAL_GAMETYPE_SELECTION( 12, "@"+tableLookup( "mp/gametypesTable.csv", 0, "oneflag", 1 ), "oneflag" )\
-			LOCAL_GAMETYPE_SELECTION( 13, "@"+tableLookup( "mp/gametypesTable.csv", 0, "fo", 1 ), "fo" )\
+			//LOCAL_GAMETYPE_SELECTION( 13, "@"+tableLookup( "mp/gametypesTable.csv", 0, "fo", 1 ), "fo" )
 		
 		#define GAMETYPE_TABLE	"mp/gametypesTable.csv"
 		
