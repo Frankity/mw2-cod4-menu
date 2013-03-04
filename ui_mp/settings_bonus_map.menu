@@ -1,0 +1,178 @@
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+
+#define CHOICE_SIZE_X			150
+#define CHOICE_SIZE_Y			22
+
+#define CHOICE_X_START			0
+#define CHOICE_Y_START			34
+
+#define CHOICE_SEP_OFFSET_Y		-2
+#define CHOICE_SEP_1			5
+#define CHOICE_SEP_2			10
+
+#define CHOICE_GROUP			"map_selection"
+
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
+
+#undef A_BUTTON_SIZE
+#define A_BUTTON_SIZE			0.3
+
+#undef A_BUTTON_OFFSET_X
+#define A_BUTTON_OFFSET_X		-2
+// ------------------- end preprocessing definitions ----------------------
+{
+	menuDef
+	{
+		name			settings_bonus_map
+		fullscreen		1
+		rect			0 0 640 480
+		focuscolor		COLOR_FOCUSED
+		style			WINDOW_STYLE_FILLED
+		border			0
+		soundloop 		"music_mainmenu_mp"
+		onOpen
+		{
+			focusFirst;
+			setfocusbydvar "ui_mapname";
+		}
+		onEsc
+		{
+			close self;
+		}
+		onClose
+		{
+			execNow "xupdatepartystate";
+		}
+		
+		// ------------------  statics ------------------------
+				#define MENU_BACKGROUND
+		#include "ui/blurredbg.inc"
+
+				//=============================================
+		itemDef		{
+			style			WINDOW_STYLE_SHADER
+			rect			56 448 528 40 0 0
+			background		"white"
+			forecolor		0.9 0.9 0.95 0.175
+			visible			1
+			decoration	}
+		itemDef		{
+			style			WINDOW_STYLE_SHADER
+			rect			584 448 16 64 0 0
+			origin			0 0
+			background		HIGHLIGHT_SHADER_ART
+			forecolor		0.9 0.9 0.95 0.175
+			visible			1
+			decoration	}
+		itemDef		{
+			style			WINDOW_STYLE_SHADER
+			rect			40 448 -16 64 0 0
+			origin			0 0
+			background		HIGHLIGHT_SHADER_ART
+			forecolor		0.9 0.9 0.95 0.175
+			visible			1
+			decoration	}
+		itemDef		{
+			style			WINDOW_STYLE_SHADER
+			rect			-120 464 160 32 0 0
+			background		"white"
+			forecolor		0.9 0.9 0.95 0.175
+			visible			1
+			decoration	}
+		itemDef		{
+			style			WINDOW_STYLE_SHADER
+			rect			600 464 160 32 0 0
+			background		"white"
+			forecolor		0.9 0.9 0.95 0.175
+			visible			1
+			decoration	}		
+		//=============================================	
+		/*
+				itemDef
+		{
+			type			ITEM_TYPE_TEXT
+			origin			35 34
+			forecolor		1 1 1 1
+			text			"Choose Map"
+			textfont		UI_FONT_NORMAL
+			textscale		TEXTSIZE_TITLE
+			visible			1
+			decoration
+		}
+		*/
+		itemDef
+		{
+			rect 48 40 0 0
+			style 0
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 0.8 0.4 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			type 0
+			align 0
+			textAlign 4
+			textAlignX -36
+			textAlignY -36
+			textScale 0.5833
+			textStyle 6
+			textFont 1
+			visible 1
+			exp text ( "@MENU_CHOOSE_MAP_CAP"  )
+		}
+		
+		#define MAP_LIST\		
+			LOCAL_MAP_SELECTION( 1, "@PATCH_COMPLEX", "mp_complex", "@PATCH_DESC_MAP_COMPLEX" )\ 
+			LOCAL_MAP_SELECTION( 2, "@MPUI_CRASH", "mp_crash", "@MPUI_DESC_MAP_CRASH" )\
+			LOCAL_MAP_SELECTION( 3, "@MPUI_OVERGROWN", "mp_overgrown", "@MPUI_DESC_MAP_OVERGROWN" )\
+			LOCAL_MAP_SELECTION( 4, "@PATCH_COMPACT", "mp_compact", "@PATCH_DESC_MAP_COMPACT" )\
+			LOCAL_MAP_SELECTION( 5, "@PATCH_STORM", "mp_storm", "@PATCH_DESC_MAP_STORM" )\
+			CHOICE_SEPARATOR_VIS( CHOICE_SEP_1, 1 )\
+			LOCAL_MAP_SELECTION( 6, "@PATCH_ABANDON", "mp_abandon", "@PATCH_DESC_MAP_ABANDON" )\
+			LOCAL_MAP_SELECTION( 7, "@PATCH_FUEL2", "mp_fuel2", "@PATCH_DESC_MAP_FUEL2" )\
+			LOCAL_MAP_SELECTION( 8, "@PATCH_STRIKE", "mp_strike", "@PATCH_DESC_MAP_STRIKE" )\
+			LOCAL_MAP_SELECTION( 9, "@PATCH_TRAILERPARK", "mp_trailerpark", "@PATCH_DESC_MAP_TRAILERPARK" )\
+			LOCAL_MAP_SELECTION( 10, "@PATCH_VACANT", "mp_vacant", "@PATCH_DESC_MAP_VACANT" )\
+			CHOICE_SEPARATOR_VIS( CHOICE_SEP_2, 2 )\
+			LOCAL_MAP_SELECTION( 11, "@MPUI_NUKED", "mp_nuked", "" )\ 
+			LOCAL_MAP_SELECTION( 12, "Contingency", "contingency", "" )\
+			LOCAL_MAP_SELECTION( 13, "Pripyat", "so_ghillies", "" )\
+			LOCAL_MAP_SELECTION( 14, "IW4 Test Map", "iw4_credits", "It's basically a cube!" )\
+			LOCAL_MAP_SELECTION( 15, "Burger Town", "invasion", "" )\
+			LOCAL_MAP_SELECTION( 16, "@MPUI_GULAG", "gulag", "@MPUI_DESC_MAP_GULAG" )\
+			LOCAL_MAP_SELECTION( 17, "@MPUI_OILRIG", "oilrig", "@MPUI_OILRIG" )
+			 
+		#define MAP_TABLE	"mp/mapsTable.csv"
+		
+		#include "ui_mp/map_info.inc"
+		
+				itemDef 
+		{
+			name			back
+			text			"@MENU_BACK"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			70 450 70 22 
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		.35	
+			textalignx		0
+			textaligny		18
+			forecolor		.9 .9 .95 1
+			visible			1
+			mouseEnter		{ play "mouse_over"; }
+			action 
+			{
+				play "mouse_click";
+				close self;
+			}	
+		}
+	}
+}

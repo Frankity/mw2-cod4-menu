@@ -1,0 +1,621 @@
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+
+#define CHOICE_X_START			0
+#define CHOICE_Y_START			120
+
+#define CHOICE_GROUP			"main"
+#define CHOICE_SEP_1			3
+#define CHOICE_SEP_2			6
+#define CHOICE_SEP_3			9
+
+#define STYLE_PC
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
+
+{
+	menuDef
+	{
+		name main_text
+		fullscreen 1
+		rect 0 0 640 480
+		style 0
+		border 0
+		ownerdraw 0
+		ownerdrawFlag 0
+		borderSize 0
+		foreColor 1 1 1 1
+		backColor 0 0 0 0
+		borderColor 0 0 0 0
+		outlineColor 0 0 0 0
+		soundLoop music_mainmenu_mp
+		fadeCycle 1
+		fadeClamp 1
+		fadeAmount 0.1
+		fadeInAmount 0
+		blurWorld 0
+		
+		onOpen
+		{
+			exec "selectStringTableEntryInDvar mp/didyouknow.csv 0 didyouknow;intro 1";
+		}
+		onESC
+		{
+			open quit_popmenu;
+		}
+		execKey "f" // open friendslist when pressing the f button, like in iw5
+		{
+			open popup_friends;
+			play "mouse_click";
+		}
+		
+		focusColor 1 1 1 1
+		
+		//#define DO_THE_SIDEBAR_THINGY
+		#include "ui/blurredbg.inc"
+		
+		itemDef
+		{
+			rect -10 10 200 100
+			style 3
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			origin 0 0
+			background logo_iw
+			decoration 
+			type 0
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 0
+			textScale 0.55
+			textStyle 0
+			textFont 0
+			feeder 0
+			visible 1
+		}
+		
+		itemDef
+		{
+			name "modname"
+			rect (CHOICE_X_START + 10) (CHOICE_Y_START - 100) 200 16
+			style 1
+			border 0
+			borderSize 0
+			forecolor 1 1 1 0.8
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			type 1
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 0
+			textScale 0.25
+			textStyle 0
+			textFont 0
+			feeder 0
+			decoration
+			exp text "fs_game: " + dvarstring( "fs_game" )
+			visible	when( dvarString( fs_game ) != "" );
+		}
+		
+		/*itemDef
+		{
+			rect 324 330 288 18
+			style 0
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 0.65
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			autoWrapped 
+			type 0
+			align 0
+			textAlign 6
+			textAlignX 0
+			textAlignY 0
+			textScale 0.375
+			textStyle 0
+			textFont 3
+			feeder 0
+			visible 1
+			exp text ( localvarstring( "ui_hint_text" )  )
+		}*/
+
+		/*#undef CHOICE_TEXTALIGN
+		#define	CHOICE_TEXTALIGN	ITEM_ALIGN_MIDDLE_RIGHT
+
+		#undef CHOICE_TEXT_OFFSET_X
+		#define CHOICE_TEXT_OFFSET_X	-15*/
+		
+		CHOICE_BUTTON_VIS(1, "@MENU_JOIN_GAME", open pc_join_unranked;, 1)
+		CHOICE_BUTTON_VIS(2, "@MENU_START_NEW_SERVER",	open createserver;, 1 )
+		CHOICE_BUTTON_VIS(3, "@MENU_PRIVATE_MATCH",
+                    exec "xrequirelivesignin";
+					setdvar "systemlink" 0;
+					setdvar "splitscreen" 0;
+					setdvar "onlinegame" 1;
+					exec "exec default_xboxlive.cfg";
+					exec "party_maxplayers 18";
+					exec "xblive_privatematch 0";
+					exec "xblive_rankedmatch 0";
+					exec "xstartprivateparty";
+					setdvar "ui_mptype" 0;
+                    exec "xcheckezpatch";
+                    exec "exec default_xboxlive.cfg"
+                    exec "exec xblive_rankedmatch 0";
+                    exec "ui_enumeratesaved";
+                    exec "xblive_privatematch 1";
+                    exec "xstartprivatematch";
+                    open menu_xboxlive_privatelobby;
+					, 1)
+		CHOICE_SEPARATOR_VIS( CHOICE_SEP_1, 1 )
+		
+		// old button code
+		/*CHOICE_BUTTON_VIS(3, "@MPUI_CREATE_A_CLASS", open cac_popup;, 1)
+		CHOICE_BUTTON_VIS(4, "@MPUI_PLAYERCARD", open popup_callsign;, 1)
+		CHOICE_BUTTON_VIS(5, "@MENU_RANK_AND_CHALLENGES", open menu_online_barracks;, 1)*/
+		
+		// new button code, now showing the specialty_new image when something got unlocked ;D
+		CHOICE_BUTTON_FOCUS_VIS_ADV( 4, "@MPUI_CREATE_A_CLASS", open cac_popup;, setLocalVarString ui_hint_text ( "@MPUI_DESC_CREATE_A_CLASS" ), CLEARUIHINT, when( isitemunlocked( "cac" ) ), isitemunlocked( "cac" ) )
+		CHOICE_BUTTON_FOCUS_VIS_NOHI( 4, "", ;, exec "set ui_hint_text @MPUI_DESC_CREATE_A_CLASS_LOCKED", CLEARUIHINT, when( !isitemunlocked( "cac" ) ) )
+		CHOICE_DBUTTON_VIS( 4, "@MPUI_CREATE_A_CLASS", when( !isitemunlocked( "cac" ) ) )
+		CHOICE_NEWICON_VIS( 4, "specialty_new", when( ( isitemunlocked( "cac" ) && ( getplayerdataanybooltrue( "weaponNew" ) || getplayerdataanybooltrue( "camoNew" ) || getplayerdataanybooltrue( "attachmentNew" ) ) || getplayerdataanybooltrue( "perkNew" ) || ( ( getplayerdata( "perkNew" , "frag_grenade_mp" ) || getplayerdata( "perkNew" , tablelookup( "mp/perkTable.csv" , 1 , "frag_grenade_mp" , 8 ) ) ) || ( getplayerdata( "perkNew" , "semtex_mp" ) || getplayerdata( "perkNew" , tablelookup( "mp/perkTable.csv" , 1 , "semtex_mp" , 8 ) ) ) || ( getplayerdata( "perkNew" , "c4_mp" ) || getplayerdata( "perkNew" , tablelookup( "mp/perkTable.csv" , 1 , "c4_mp" , 8 ) ) ) || ( getplayerdata( "perkNew" , "claymore_mp" ) || getplayerdata( "perkNew" , tablelookup( "mp/perkTable.csv" , 1 , "claymore_mp" , 8 ) ) ) || ( getplayerdata( "perkNew" , "throwingknife_mp" ) || getplayerdata( "perkNew" , tablelookup( "mp/perkTable.csv" , 1 , "throwingknife_mp" , 8 ) ) ) || ( getplayerdata( "perkNew" , "specialty_tacticalinsertion" ) || getplayerdata( "perkNew" , tablelookup( "mp/perkTable.csv" , 1 , "specialty_tacticalinsertion" , 8 ) ) ) || ( getplayerdata( "perkNew" , "specialty_blastshield" ) || getplayerdata( "perkNew" , tablelookup( "mp/perkTable.csv" , 1 , "specialty_blastshield" , 8 ) ) ) || weaponclassnew( "weapon_grenade" ) || weaponclassnew( "weapon_equipment" ) ) || getplayerdata( "featureNew" , "cac" ) ) ) )
+		
+		CHOICE_BUTTON_FOCUS_VIS_ADV( 5, "@MPUI_PLAYERCARD", open popup_callsign;, setLocalVarString ui_hint_text ( "@MPUI_DESC_PLAYERCARD" ), CLEARUIHINT, when( isitemunlocked( "playercard" ) ), isitemunlocked( "playercard" ) )
+		CHOICE_BUTTON_FOCUS_VIS_NOHI( 5, "", ;, exec "set ui_hint_text @MPUI_DESC_PLAYERCARD_LOCKED", CLEARUIHINT, when( !isitemunlocked( "playercard" ) ) )
+		CHOICE_DBUTTON_VIS( 5, "@MPUI_PLAYERCARD", when( !isitemunlocked( "playercard" ) ) )
+		CHOICE_NEWICON_VIS( 5, "specialty_new", when( ( getplayerdata( "featureNew" , "cas" ) || getplayerdata( "featureNew" , "token_1" ) || getplayerdata( "featureNew" , "token_2" ) || getplayerdata( "featureNew" , "token_3" ) || getplayerdata( "featureNew" , "token_4" ) || getplayerdata( "featureNew" , "token_5" ) || getplayerdata( "featureNew" , "token_6" ) || getplayerdata( "featureNew" , "token_7" ) || getplayerdata( "featureNew" , "token_8" ) || getplayerdata( "featureNew" , "token_9" ) || getplayerdata( "featureNew" , "token_10" ) || getplayerdata( "featureNew" , "token_11" ) || getplayerdata( "featureNew" , "token_12" ) ) || getplayerdata( "featureNew" , "clantag" ) || ( getplayerdataanybooltrue( "iconNew" ) || getplayerdata( "featureNew" , "playercard_icon" ) ) || ( getplayerdataanybooltrue( "titleNew" ) || getplayerdata( "featureNew" , "playercard_title" ) ) ))
+		
+		CHOICE_BUTTON_FOCUS_VIS_ADV( 6, "@MENU_RANK_AND_CHALLENGES", open menu_online_barracks;, setLocalVarString ui_hint_text ( "@MPUI_DESC_BARRACKS" ), CLEARUIHINT, 1, 1 )
+		CHOICE_NEWICON_VIS( 6, "specialty_new", when( ( ( getplayerdataanybooltrue( "challengeTierNew" ) || getplayerdata( "featureNew" , "challenges" ) ) || getplayerdata( "featureNew" , "challenges" ) || getplayerdata( "featureNew" , "prestige" ) ) ) )
+		
+		CHOICE_SEPARATOR_VIS( CHOICE_SEP_2, 1 )
+		
+		CHOICE_BUTTON_VIS(7, "Friends", open popup_friends;, 1)
+		CHOICE_BUTTON_VIS(8, "@MENU_MODS", open mods_menu;, 1)
+		CHOICE_BUTTON_VIS(9, "@MENU_OPTIONS", open pc_options;, 1)
+		
+		CHOICE_SEPARATOR_VIS( CHOICE_SEP_3, 1 )
+		
+		CHOICE_BUTTON_VIS(10, "@MENU_QUIT", open quit_popmenu;, 1)
+		
+		//CHOICE_FOOTNOTE_VIS( "@MENU_GAME_EXPERIENCE_MAY_CHANGE", CHOICE_X_START, 380, when( !localvarBool( ui_hideBack ) ) )
+		
+		// commented out because it doesn't match iw3 style ;D	
+		/*itemDef
+		{
+			name		"friendslist"
+			rect 550 420 60 17.5
+			border 0
+			foreColor 1 1 1 1
+			backColor 0 0 0 0
+			style 1
+			type 1
+			textAlign 5
+			textAlignX 0
+			textAlignY -1
+			textScale 0.375
+			textFont 3
+			text "Friends ^2F"
+			onFocus
+			{
+				play mouse_over;
+				setItemColor self backcolor 1 1 1 0.5;
+				setLocalVarBool ui_menuAButton 1;
+				setLocalVarFloat ui_popupYPos 0.000000;
+			}
+			leaveFocus
+			{
+				setItemColor self backcolor 0 0 0 0;
+				setLocalVarBool ui_menuAButton 1;
+			}
+			action
+			{
+				play mouse_click;
+				open popup_friends;
+			}
+			visible 1
+		}*/
+		itemDef
+		{
+			rect 0 0 208 70 3 1
+			style 3
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 0 0 0 0.25
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			background white
+			decoration 
+			type 0
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 0
+			textScale 0.55
+			textStyle 0
+			textFont 0
+			feeder 0
+			visible 1
+			visible when ( 1 && ( getplayercardinfo( 0 , 1 , 0 ) != 0 )  )
+			//exp rect x ( ( -208 )  )
+			//exp rect y ( ( 325 )  )
+			exp rect x ( ( -170 )  )
+			exp rect y ( ( 18 )  )
+		}
+		itemDef
+		{
+			rect 0 0 208 70 3 1
+			style 1
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 1 1 1 1
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			background cardtitle_248x48
+			decoration 
+			type 0
+			align 0
+			textAlign 4
+			textAlignX 0
+			textAlignY -20
+			textScale 0.375
+			textStyle 7
+			textFont 6
+			feeder 0
+			visible 1
+			visible when ( 1 && ( getplayercardinfo( 0 , 1 , 0 ) != 0 )  )
+			//exp rect x ( ( - 208 )  )
+			//exp rect y ( ( 325 )  )
+			exp rect x ( ( -170 )  )
+			exp rect y ( ( 18 )  )
+		}
+		itemDef
+		{
+			rect 0 0 160 32 3 1
+			style 1
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 1 1 1 1
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			type 0
+			align 0
+			textAlign 9
+			textAlignX 0
+			textAlignY 0
+			textScale 0.375
+			textStyle 8
+			textFont 3
+			feeder 0
+			visible 1
+			exp text ( "@" + tablelookupbyrow( "mp/cardTitleTable.csv" , getplayercardinfo( 1 , 1 , 0 ) , 1 )  )
+			exp material ( tablelookupbyrow( "mp/cardTitleTable.csv" , getplayercardinfo( 1 , 1 , 0 ) , 2 )  )
+			visible when ( 1 && ( getplayercardinfo( 0 , 1 , 0 ) != 0 )  )
+			//exp rect x ( - 208  )
+			//exp rect y ( ( 325 ) - 2 )
+			exp rect x ( - 170  )
+			exp rect y ( ( 18 ) - 2 )
+			exp forecolor r ( tablelookupbyrow( "mp/cardTitleTable.csv" , getplayercardinfo( 1 , 1 , 0 ) , 3 )  )
+			exp forecolor g ( tablelookupbyrow( "mp/cardTitleTable.csv" , getplayercardinfo( 1 , 1 , 0 ) , 4 )  )
+			exp forecolor b ( tablelookupbyrow( "mp/cardTitleTable.csv" , getplayercardinfo( 1 , 1 , 0 ) , 5 )  )
+		}
+		itemDef
+		{
+			rect 0 0 160 18 3 1
+			style 0
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			type 0
+			align 0
+			textAlign 4
+			textAlignX 8
+			textAlignY 0
+			textScale 0.3333
+			textStyle 8
+			textFont 10
+			feeder 0
+			visible 1
+			exp text ( getplayercardinfo( 8 , 1 , 0 )  )
+			visible when ( 1 && ( getplayercardinfo( 0 , 1 , 0 ) != 0 )  )
+			//exp rect x ( - 208  )
+			//exp rect y ( ( 325 ) + 33 )
+			exp rect x ( - 170  )
+			exp rect y ( ( 18 ) + 33 )
+		}
+		itemDef
+		{
+			rect 0 0 48 48 3 1
+			style 3
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			type 0
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 0
+			textScale 0.55
+			textStyle 0
+			textFont 0
+			feeder 0
+			visible 1
+			exp material ( tablelookupbyrow( "mp/cardIconTable.csv" , getplayercardinfo( 2 , 1 , 0 ) , 1 )  )
+			visible when ( 1 && ( getplayercardinfo( 0 , 1 , 0 ) != 0 )  )
+			//exp rect x ( ( - 208 ) + 160  )
+			//exp rect y ( ( 325 )  )
+			exp rect x ( ( - 170 ) + 160  )
+			exp rect y ( ( 18 )  )			
+		}
+		itemDef
+		{
+			rect 0 0 208 20 3 1
+			style 1
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			type 0
+			align 0
+			textAlign 8
+			textAlignX 8
+			textAlignY 0
+			textScale 0.375
+			textStyle 7
+			textFont 3
+			feeder 0
+			visible 1
+			exp text ( "[" + getplayercardinfo( 9 , 1 , 0 ) + "]"  )
+			visible when ( 1 && ( getplayercardinfo( 0 , 1 , 0 ) != 0 ) && getplayercardinfo( 9 , 1 , 0 ) != ""  )
+			//exp rect x ( ( - 208 )  )
+			//exp rect y ( ( 325 ) + 48  )
+			exp rect x ( ( - 170 )  )
+			exp rect y ( ( 18 ) + 48  )
+		}
+		itemDef
+		{
+			rect 0 0 20 20 3 1
+			style 1
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 1 1 1 1
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			type 0
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 0
+			textScale 0.55
+			textStyle 0
+			textFont 0
+			feeder 0
+			visible 1
+			exp material ( tablelookup( "mp/rankIconTable.csv" , 0 , getplayercardinfo( 4 , 1 , 0 ) , ( getplayercardinfo( 5 , 1 , 0 ) + 1 ) )  )
+			visible when ( 1 && ( getplayercardinfo( 0 , 1 , 0 ) != 0 ) && ( getplayercardinfo( 4 , 1 , 0 ) >= 0 )  )
+			//exp rect x ( ( - 208 ) + 164  )
+			//exp rect y ( ( 325 ) + 48  )
+			exp rect x ( ( - 170 ) + 164  )
+			exp rect y ( ( 18 ) + 48  )
+		}
+		itemDef
+		{
+			rect 0 0 20 20 3 1
+			style 0
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			type 0
+			align 0
+			textAlign 9
+			textAlignX 20
+			textAlignY 0
+			textScale 0.375
+			textStyle 7
+			textFont 3
+			feeder 0
+			visible 1
+			exp text ( tablelookup( "mp/rankTable.csv" , 0 , getplayercardinfo( 4 , 1 , 0 ) , 14 )  )
+			visible when ( 1 && ( getplayercardinfo( 0 , 1 , 0 ) != 0 ) && ( getplayercardinfo( 4 , 1 , 0 ) >= 0 )  )
+			//exp rect x ( ( - 208 ) + 164  )
+			//exp rect y ( ( 325 ) + 48  )
+			exp rect x ( ( - 170 ) + 164  )
+			exp rect y ( ( 18 ) + 48  )
+		}
+						itemDef
+		{
+			rect 0 0 20 20 3 1
+			style 3
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			type 0
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 0
+			textScale 0.55
+			textStyle 0
+			textFont 0
+			feeder 0
+			visible 1
+			exp material ( tableLookup( "mp/killstreakTable.csv", 1, (getPlayerData( "killstreaks", 0 )), 16 ) )
+			//exp rect x ( ( - 208 ) + 75  )
+			//exp rect y ( ( 325 ) + 48  )
+			exp rect x ( ( - 170 ) + 75  )
+			exp rect y ( ( 18 ) + 48  )
+		}
+		
+		itemDef
+		{
+			rect 0 0 20 20 3 1
+			style 3
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			type 0
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 0
+			textScale 0.55
+			textStyle 0
+			textFont 0
+			feeder 0
+			visible 1
+			exp material ( tableLookup( "mp/killstreakTable.csv", 1, (getPlayerData( "killstreaks", 1 )), 16 ) )
+			//exp rect x ( ( - 208 ) + 96  )
+			//exp rect y ( ( 325 ) + 48  )
+			exp rect x ( ( - 170 ) + 96  )
+			exp rect y ( ( 18 ) + 48  )
+		}
+		
+						itemDef
+		{
+			rect 0 0 20 20 3 1
+			style 3
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			type 0
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 0
+			textScale 0.55
+			textStyle 0
+			textFont 0
+			feeder 0
+			visible 1
+			exp material ( tableLookup( "mp/killstreakTable.csv", 1, (getPlayerData( "killstreaks", 2 )), 16 ) )
+			//exp rect x ( ( - 208 ) + 117  )
+			//exp rect y ( ( 325 ) + 48  )
+			exp rect x ( ( - 170 ) + 117  )
+			exp rect y ( ( 18 ) + 48  )
+		}
+		itemDef
+		{
+			rect 0 0 20 20 3 1
+			style 0
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			type 0
+			align 0
+			textAlign 9
+			textAlignX 20
+			textAlignY 0
+			textScale 0.375
+			textStyle 7
+			textFont 3
+			feeder 0
+			visible 1
+			exp text ("Killstreaks:")
+			//exp rect x ( ( - 208 ) + 10  )
+			//exp rect y ( ( 325 ) + 48  )
+			exp rect x ( ( - 170 ) + 10  )
+			exp rect y ( ( 18 ) + 48  )
+		}
+		itemDef
+		{
+			name		"ticker_bg"
+			style		WINDOW_STYLE_FILLED
+			visible		1
+			rect		-107 0 900 16 1 3
+			backcolor	0 0 0 0.5
+			decoration
+		}
+
+		itemDef
+		{
+			name		"ticker"
+			type		ITEM_TYPE_NEWSTICKER
+			style		WINDOW_STYLE_FILLED
+			visible		1
+			rect		-107 0 900 16 1 3
+			forecolor	1 1 1 1
+			backcolor	0 0 0 0.7
+			textfont	3
+			textscale	.26
+			textaligny	16.5
+			text		"mimimimimimimimi"
+			background	shadow_inset
+			speed		20
+			decoration
+		}
+	}
+}

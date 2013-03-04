@@ -1,0 +1,307 @@
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+#define OPTIONS_STYLE			1
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
+
+{
+	menuDef
+	{
+		name pc_options_actions
+		fullscreen 0
+		rect 0 0 640 480
+		style 0
+		border 0
+		ownerdraw 0
+		ownerdrawFlag 0
+		borderSize 0
+		foreColor 1 1 1 1
+		backColor 0 0 0 0
+		borderColor 0 0 0 0
+		outlineColor 0 0 0 0
+		fadeCycle 1
+		fadeClamp 1
+		fadeAmount 0.1
+		fadeInAmount 0
+		blurWorld 0
+		onOpen
+		{
+			close pc_options_video;
+			close pc_options_audio;
+			close pc_options_voice;
+			close pc_options_look;
+			close pc_options_movement;
+			close controls_multi;
+			close options_graphics;
+			close options_graphics_texture;
+			close options_graphics_defaults;
+			close options_control_defaults;
+		
+			setLocalVarBool ui_hideBack 1;
+		}
+		onClose
+		{
+			setLocalVarBool ui_hideBack 1;
+		}
+		onESC
+		{
+			close self;
+		}
+		focusColor 1 1 1 1
+		#include "ui/blurredbg.inc"
+		
+		itemDef
+		{
+			rect -120 -32 378 64
+			style 3
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 0.9 0.9 0.95 0.175
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			background white
+			decoration 
+			type 0
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 0
+			textScale 0.55
+			textStyle 0
+			textFont 0
+			visible 1
+		}
+		itemDef
+		{
+			rect 258 -32 16 -64
+			style 3
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 0.9 0.9 0.95 0.175
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			background button_highlight_end
+			decoration 
+			type 0
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 0
+			textScale 0.55
+			textStyle 0
+			textFont 0
+			visible 1
+		}
+		itemDef
+		{
+			rect 56 448 528 40
+			style 3
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 0.9 0.9 0.95 0.175
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			background white
+			decoration 
+			type 0
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 0
+			textScale 0.55
+			textStyle 0
+			textFont 0
+			visible 1
+		}
+		itemDef
+		{
+			rect 584 448 16 64
+			style 3
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 0.9 0.9 0.95 0.175
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			background button_highlight_end
+			decoration 
+			type 0
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 0
+			textScale 0.55
+			textStyle 0
+			textFont 0
+			visible 1
+		}
+		itemDef
+		{
+			rect 40 448 -16 64
+			style 3
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 0.9 0.9 0.95 0.175
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			background button_highlight_end
+			decoration 
+			type 0
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 0
+			textScale 0.55
+			textStyle 0
+			textFont 0
+			visible 1
+		}
+		itemDef
+		{
+			rect -120 464 160 32
+			style 3
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 0.9 0.9 0.95 0.175
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			background white
+			decoration 
+			type 0
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 0
+			textScale 0.55
+			textStyle 0
+			textFont 0
+			visible 1
+		}
+		itemDef
+		{
+			rect 600 464 160 32
+			style 3
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 0.9 0.9 0.95 0.175
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			background white
+			decoration 
+			type 0
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 0
+			textScale 0.55
+			textStyle 0
+			textFont 0
+			visible 1
+		}
+		itemDef
+		{
+			rect 48 40 0 0
+			style 0
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 0.8 0.4 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			type 0
+			align 0
+			textAlign 4
+			textAlignX -36
+			textAlignY -36
+			textScale 0.5833
+			textStyle 6
+			textFont 1
+			visible 1
+			exp text ( "@MENU_CONTROLS"  )
+		}
+		itemDef
+		{
+			name back
+			rect -250 9 40 20 2 3
+			style 1
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			type 1
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 18
+			textScale 0.375
+			textStyle 3
+			textFont 1
+			text "@MENU_BACK"
+			visible 1
+			mouseEnter
+			{
+				play mouse_over;
+			}
+			action
+			{
+				play mouse_click;
+				play mouse_click;
+				close self;
+			}
+		}
+		
+		#include "ui_mp/leftside_controls.inc"
+		#undef CHOICE_TEXTSIZE
+		#define CHOICE_TEXTSIZE 0.33
+		
+		CHOICE_SECTION_TITLE( 21, "@MENU_ACTIONS" )
+
+		CHOICE_BIND( 22, "@MENU_FIRE_WEAPON", "+attack", ; )
+		CHOICE_BIND( 23, "@MENU_AIM_DOWN_THE_SIGHT", "+toggleads_throw", ; )
+		CHOICE_BIND( 24, "@MENU_HOLD_AIM_DOWN_SIGHT", "+speed_throw", ; )
+		CHOICE_BIND( 26, "@MENU_RELOAD_WEAPON", "+reload", ; )
+		CHOICE_BIND( 27, "@MENU_SWITCH_WEAPON", "weapnext", ; )
+		CHOICE_BIND( 28, "@MENU_MELEE_ATTACK", "+melee", ; )
+		CHOICE_BIND( 29, "@MENU_USE", "+activate", ; )
+		CHOICE_BIND( 30, "@MENU_FRAG_EQUIPMENT", "+frag", ; )
+		CHOICE_BIND( 31, "@MENU_THROW_SPECIAL_GRENADE", "+smoke", ; )
+		
+		CHOICE_BIND( 33, "@MENU_WEAPON_ATTACHMENT", "+actionslot 3", ; )
+		CHOICE_BIND_VIS( 34, "@MENU_INVENTORY_KILLSTREAK", "+actionslot 4", ;, when( dvarbool( ui_multiplayer ) ) ) //mp
+		CHOICE_BIND_VIS( 34, "@MENU_SECONDARY_INVENTORY", "+actionslot 2", ;, when( !dvarbool( ui_multiplayer ) ) ) //sp
+		CHOICE_BIND_VIS( 35, "@MENU_SECONDARY_INVENTORY", "+actionslot 2", ;, when( dvarbool( ui_multiplayer ) ) ) //mp
+		CHOICE_BIND_VIS( 35, "@MENU_NVG_WATCH", "+actionslot 1", ;, when( !dvarbool( ui_multiplayer ) ) ) //sp
+		CHOICE_BIND_VIS( 36, "@MENU_NVG_WATCH", "+actionslot 1", ;, when( dvarbool( ui_multiplayer ) ) ) //mp
+		CHOICE_BIND_VIS( 36, "@MENU_SHOW_OBJECTIVES_SCORES", "+scores", ;, when( !dvarbool( ui_multiplayer ) ) ) //sp
+		CHOICE_BIND_VIS( 38, "@MENU_SHOW_OBJECTIVES_SCORES", "+scores", ;, when( dvarbool( ui_multiplayer ) ) ) //mp
+
+		CHOICE_KEYBINDHELP
+	}
+}
