@@ -41,7 +41,7 @@
 		{
 			uiScript LoadArenas;
 			uiScript UpdateFilter;
-			//uiScript RefreshServers;
+			uiScript RefreshServers;
 		}
 		onEsc
 		{
