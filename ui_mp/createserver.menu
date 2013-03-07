@@ -23,28 +23,31 @@
 		focuscolor		COLOR_FOCUSED
 		style			1
 		border			0
-		onEsc  			{ close self; }
+		onEsc  			
+		{ 
+			close "self"; 
+		}
 		onOpen 
 		{ 
-		execnow "nosplitscreen";
-		setdvar "systemlink" 0;
-		setdvar "splitscreen" 0;
-		setdvar "onlinegame" 1;
-		setdvar "ui_mptype" 0;
-		exec "xrequirelivesignin";
-		exec "xcheckezpatch";
-		exec "exec default_xboxlive.cfg";
-		exec "exec dvar_defaults.cfg";
-		exec "party_maxplayers 18";
-		exec "xblive_privatematch 1";
-		exec "xblive_rankedmatch 0";
-		exec "ui_enumeratesaved";
-		exec "xstartprivatematch";
-		uiScript loadArenas;	
+			execnow "nosplitscreen";
+			setdvar "systemlink" 0;
+			setdvar "splitscreen" 0;
+			setdvar "onlinegame" 1;
+			setdvar "ui_mptype" 0;
+			exec "xrequirelivesignin";
+			exec "xcheckezpatch";
+			exec "exec default_xboxlive.cfg";
+			exec "exec dvar_defaults.cfg";
+			exec "party_maxplayers 18";
+			exec "xblive_privatematch 1";
+			exec "xblive_rankedmatch 0";
+			exec "ui_enumeratesaved";
+			exec "xstartprivatematch";
+			uiScript "loadArenas";	
 		}
 		onClose
 		{
-			open main_text;
+			open "main_text";
 		}
 
 		#define MENU_BACKGROUND
@@ -54,68 +57,82 @@
 		#include "ui_mp/navcontrols.inc"
 
 				//=============================================
-		itemDef		{
+		itemDef		
+		{
 			style			WINDOW_STYLE_SHADER
 			rect			56 448 528 40 0 0
 			background		"white"
 			forecolor		0.9 0.9 0.95 0.175
 			visible			1
-			decoration	}
-		itemDef		{
+			decoration	
+		}
+		itemDef		
+		{
 			style			WINDOW_STYLE_SHADER
 			rect			584 448 16 64 0 0
 			origin			0 0
 			background		HIGHLIGHT_SHADER_ART
 			forecolor		0.9 0.9 0.95 0.175
 			visible			1
-			decoration	}
-		itemDef		{
+			decoration	
+		}
+		itemDef		
+		{
 			style			WINDOW_STYLE_SHADER
 			rect			40 448 -16 64 0 0
 			origin			0 0
 			background		HIGHLIGHT_SHADER_ART
 			forecolor		0.9 0.9 0.95 0.175
 			visible			1
-			decoration	}
-		itemDef		{
+			decoration	
+		}
+		itemDef		
+		{
 			style			WINDOW_STYLE_SHADER
 			rect			-120 464 160 32 0 0
 			background		"white"
 			forecolor		0.9 0.9 0.95 0.175
 			visible			1
-			decoration	}
-		itemDef		{
+			decoration	
+		}
+		itemDef		
+		{
 			style			WINDOW_STYLE_SHADER
 			rect			600 464 160 32 0 0
 			background		"white"
 			forecolor		0.9 0.9 0.95 0.175
 			visible			1
-			decoration	}		
+			decoration	
+		}		
 		//=============================================	
 		
-		CHOICE_DVAREDIT_VIS( 		1, "@MENU_SERVER_NAME", "sv_hostname", 20, 20, ;, 1 )
-		CHOICE_DVARYESNO( 		2, "@MENU_PURE", "sv_pure", ; )
-		CHOICE_DVAREDIT_NUMERIC( 	3, "@MENU_MAXIMUM_PLAYERS", "sv_maxclients", 3, ; )
-		CHOICE_DVAREDIT_NUMERIC( 	4, "@MENU_MINIMUM_PING", "sv_minping", 4, ; )
-		CHOICE_DVAREDIT_NUMERIC( 	5, "@MENU_MAXIMUM_PING", "sv_maxping", 4, ; )
-		CHOICE_DVAREDIT_VIS( 		6, "@MENU_PASSWORD1", "g_password", 12, 12, ;, 1 )
+		CHOICE_DVAREDIT_VIS( 1, "@MENU_SERVER_NAME", "sv_hostname", 20, 20, ;, 1 )
+		CHOICE_DVARYESNO( 2, "@MENU_PURE", "sv_pure", ; )
+		CHOICE_DVAREDIT_NUMERIC( 3, "@MENU_MAXIMUM_PLAYERS", "sv_maxclients", 3, ; )
+		CHOICE_DVAREDIT_NUMERIC( 4, "@MENU_MINIMUM_PING", "sv_minping", 4, ; )
+		CHOICE_DVAREDIT_NUMERIC( 5, "@MENU_MAXIMUM_PING", "sv_maxping", 4, ; )
+		CHOICE_DVAREDIT_VIS( 6, "@MENU_PASSWORD1", "g_password", 12, 12, ;, 1 )
 		CHOICE_SEPARATOR( CHOICE_SEP_1 )	
-		CHOICE_DVARYESNO( 		7, "@MENU_VOICECHATCOLON", "cl_voice", ; )
-		CHOICE_DVARYESNO( 		8, "@MENU_AUTOBALANCE_TEAMS", "scr_teambalance", ; )
+		CHOICE_DVARYESNO( 7, "@MENU_VOICECHATCOLON", "cl_voice", ; )
+		CHOICE_DVARYESNO( 8, "@MENU_AUTOBALANCE_TEAMS", "scr_teambalance", ; )
 		CHOICE_SEPARATOR( CHOICE_SEP_2 )
-		CHOICE_BUTTON_VIS( 		9, "Change Game Mode", open settings_gametype;, 1 )
+		CHOICE_BUTTON_VIS( 9, "Change Game Mode", open settings_gametype;, 1 )
 
-		#define LOCAL_RULES_ACTION\
-				uiScript openMenuOnDvar "ui_gametype" dm "settings_quick_dm";\
-				uiScript openMenuOnDvar "ui_gametype" war "settings_quick_war";\
-				uiScript openMenuOnDvar "ui_gametype" sd "settings_quick_sd";\
-				uiScript openMenuOnDvar "ui_gametype" sab "settings_quick_sab";\
-				uiScript openMenuOnDvar "ui_gametype" dom "settings_quick_dom";\
-				uiScript openMenuOnDvar "ui_gametype" koth "settings_quick_koth";\
-				uiScript openMenuOnDvar "ui_gametype" ctf "settings_quick_ctf";\
-				uiScript openMenuOnDvar "ui_gametype" dd "settings_quick_dd";\
+		#define LOCAL_RULES_ACTION \
+				uiScript openMenuOnDvar ui_gametype dm "settings_quick_dm"; \
+				uiScript openMenuOnDvar ui_gametype war "settings_quick_war"; \
+				uiScript openMenuOnDvar ui_gametype sd "settings_quick_sd"; \
+				uiScript openMenuOnDvar ui_gametype sab "settings_quick_sab"; \
+				uiScript openMenuOnDvar ui_gametype dom "settings_quick_dom"; \
+				uiScript openMenuOnDvar ui_gametype koth "settings_quick_koth"; \
+				uiScript openMenuOnDvar ui_gametype ctf "settings_quick_ctf"; \
+				uiScript openMenuOnDvar ui_gametype dd "settings_quick_dd"; \
+				uiScript openMenuOnDvar ui_gametype arena "settings_quick_arena"; \
+				uiScript openMenuOnDvar ui_gametype gtnw "settings_quick_gtnw"; \
+				uiScript openMenuOnDvar ui_gametype vip "settings_quick_vip"; \
+				uiScript openMenuOnDvar ui_gametype oneflag "settings_quick_oneflag"; \			
 				
-		CHOICE_BUTTON( 			10, "@MENU_GAME_TYPE_SETTINGS", LOCAL_RULES_ACTION )
+		CHOICE_BUTTON( 10, "@MENU_GAME_TYPE_SETTINGS", LOCAL_RULES_ACTION )
 		//CHOICE_FOOTNOTE_VIS( "Note: Click on the map to start game.", 332, 380, 1 )//525, 412
 		
 				itemDef
