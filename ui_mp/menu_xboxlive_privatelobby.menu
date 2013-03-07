@@ -1,0 +1,385 @@
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+
+#define CHOICE_X_START			0
+#define CHOICE_Y_START			120
+
+#define CHOICE_GROUP			"xboxlive"
+#define CHOICE_SEP_1			2
+
+#define STYLE_PC
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
+{
+	menuDef
+	{
+		name			menu_xboxlive_privatelobby
+		fullscreen		1
+		rect			0 0 640 480
+		focuscolor		COLOR_FOCUSED
+		style			WINDOW_STYLE_FILLED
+		border			0
+		soundloop 		"music_mainmenu_mp"
+		onOpen
+		{
+			execnow "xblive_rankedmatch 1";
+			execnow "xblive_privatematch 1";
+//			execnow "party_timerVisible 0";			
+			exec "exec dvar_defaults.cfg";
+			focusFirst;
+		}
+		onEsc
+		{
+			open "leavelobbywarning";
+		}
+		#include "ui/blurredbg.inc"
+		
+		#define 	BACK_ENABLE		0
+		#include "ui_mp/navcontrols.inc"
+		
+		//=============================================
+		itemDef		
+		{
+			style			WINDOW_STYLE_SHADER
+			rect			56 448 528 40 0 0
+			background		"white"
+			forecolor		0.9 0.9 0.95 0.175
+			visible			1
+			decoration	
+		}
+		itemDef		
+		{
+			style			WINDOW_STYLE_SHADER
+			rect			584 448 16 64 0 0
+			origin			0 0
+			background		HIGHLIGHT_SHADER_ART
+			forecolor		0.9 0.9 0.95 0.175
+			visible			1
+			decoration	
+		}
+		itemDef		
+		{
+			style			WINDOW_STYLE_SHADER
+			rect			40 448 -16 64 0 0
+			origin			0 0
+			background		HIGHLIGHT_SHADER_ART
+			forecolor		0.9 0.9 0.95 0.175
+			visible			1
+			decoration	
+		}
+		itemDef		
+		{
+			style			WINDOW_STYLE_SHADER
+			rect			-120 464 160 32 0 0
+			background		"white"
+			forecolor		0.9 0.9 0.95 0.175
+			visible			1
+			decoration	
+		}
+		itemDef		
+		{
+			style			WINDOW_STYLE_SHADER
+			rect			600 464 160 32 0 0
+			background		"white"
+			forecolor		0.9 0.9 0.95 0.175
+			visible			1
+			decoration	
+		}		
+		itemDef
+		{
+			rect 48 40 0 0
+			style 0
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 0.8 0.4 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			type 0
+			align 0
+			textAlign 4
+			textAlignX -36
+			textAlignY -36
+			textScale 0.5833
+			textStyle 6
+			textFont 1
+			visible 1
+			exp text ( "@MPUI_PRIVATE_MATCH_LOBBY"  )
+		}		
+		itemDef 
+		{
+			name			back
+			text			"@MENU_BACK"
+			type			1
+			style			WINDOW_STYLE_FILLED
+			textstyle		ITEM_TEXTSTYLE_SHADOWED
+			rect			70 450 70 22 
+			textfont		UI_FONT_NORMAL
+			textalign		ITEM_ALIGN_LEFT
+			textscale		.35	
+			textalignx		0
+			textaligny		18
+			forecolor		.9 .9 .95 1
+			visible			1
+			mouseEnter		{ play "mouse_over"; }
+			action 
+			{
+				play "mouse_click";
+				open "leavelobbywarning";
+			}	
+		}				
+		// --------------------------- map images------------------------------------
+		#include "ui_mp/game_info.inc"
+		// this seems to work well.
+		GAME_INFO( "preview_" + dvarString ( "ui_mapname" ), dvarString ( "party_mapname" ), dvarString( "party_gametype" ), 1 )
+
+		// --------------------------- buttons --------------------------------------
+		
+        CHOICE_BUTTON_VIS( 1, "@MENU_START_MATCH", exec "xpartygo";, when( !localvarBool( ui_hideBack ) ) )
+		CHOICE_BUTTON_VIS( 2, "@MENU_GAME_SETUP", open "popup_gamesetup";, when( !localvarBool( ui_hideBack ) ) )
+
+		CHOICE_SEPARATOR( CHOICE_SEP_1 )	
+		
+		CHOICE_BUTTON_FOCUS( 3, "@MPUI_CREATE_A_CLASS", open "cac_popup";, when( !localvarBool( ui_hideBack ) ) )
+		CHOICE_BUTTON_FOCUS( 4, "@MPUI_PLAYERCARD", open popup_callsign;, when( !localvarBool( ui_hideBack ) ) )				
+		CHOICE_BUTTON_FOCUS( 5, "@MPUI_BARRACKS", open "menu_online_barracks";, when( !localvarBool( ui_hideBack ) ) )
+//		CHOICE_BUTTON_FOCUS( 5, "@MPUI_INVITE_FRIENDS", SETUP_ACTION_INVITE, exec "set ui_hint_text @MPUI_DESC_INVITE_FRIENDS", CLEARUIHINT, when( !dvarbool( ui_partyFull ) ), SETUP_EXTRA_LAST )
+
+		// ---------------------- menu selection description -------------------------
+		itemDef	
+		{
+			name			desc_arrow
+			style			WINDOW_STYLE_SHADER
+			rect			0 3 10 10 CHOICE_HORIZONTAL_ALIGN VERTICAL_ALIGN_TOP
+			origin			ORIGIN_DESCRIPTION
+			background		"ui_arrow_right"
+			forecolor		1 1 1 0.25
+			visible			1
+			decoration
+		}
+		itemDef	
+		{
+			name			description_choice
+			type			ITEM_TYPE_TEXT
+			rect			12 0 210 36 CHOICE_HORIZONTAL_ALIGN VERTICAL_ALIGN_TOP
+			origin			ORIGIN_DESCRIPTION
+			exp				text( dvarString( ui_hint_text ) )
+			textfont		UI_FONT_DEFAULT
+			textscale		TEXTSIZE_SMALL
+			textaligny		16
+			forecolor		COLOR_DESC_TEXT
+			visible			1
+			autowrapped
+			decoration
+		}
+		// ---------------------- Player Lobby List -------------------------		
+		itemDef
+		{
+			name lobbyList
+			rect -272 27 272 380 3 1
+			style 0
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			type 6
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY -2
+			textScale 0.375
+			textStyle 0
+			textFont 0
+			feeder 48
+			visible 1
+			noscrollbars 
+			elementWidth 272
+			elementHeight 20
+			elementType 0
+			columns 1
+			0	0	1
+		}	
+		itemDef
+		{
+			rect -272 27 272 380 3 1
+			style 0
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			type 6
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY -2
+			textScale 0.375
+			textStyle 0
+			textFont 0
+			feeder 18
+			visible 1
+			noscrollbars 
+			elementWidth 272
+			elementHeight 20
+			elementType 0
+			columns 1
+			38	16	40
+		}
+		itemDef
+		{
+			rect -272 27 272 380 3 1
+			style 0
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			type 6
+			align 0
+			textAlign 0
+			textAlignX 20
+			textAlignY -2
+			textScale 0.375
+			textStyle 0
+			textFont 0
+			feeder 39
+			visible 1
+			noscrollbars 
+			elementWidth 272
+			elementHeight 20
+			elementType 0
+			columns 2
+			194	20	3
+			194	20	3
+		}
+		itemDef
+		{
+			rect -272 27 272 380 3 1
+			style 0
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 0.65
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			type 6
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY -2
+			textScale 0.375
+			textStyle 0
+			textFont 0
+			feeder 35
+			visible 1
+			noscrollbars 
+			elementWidth 272
+			elementHeight 20
+			elementType 0
+			columns 1
+			230	40	4
+		}
+		itemDef
+		{
+			name bothteams_skill
+			rect -272 27 272 380 3 1
+			style 0
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			decoration 
+			type 6
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY -2
+			textScale 0.375
+			textStyle 0
+			textFont 0
+			feeder 45
+			visible 1
+			noscrollbars 
+			elementWidth 272
+			elementHeight 20
+			elementType 0
+			columns 1
+			-20	16	40
+		}	
+		// ---------------------------- Players Recommend etc ------------------------------------			
+		itemDef
+		{
+			rect -272 0 0 18 3 1
+			style 1
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 1
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			background white
+			decoration 
+			type 0
+			align 0
+			textAlign 4
+			textAlignX 20
+			textAlignY 0
+			textScale 0.375
+			textStyle 0
+			textFont 3
+			feeder 0
+			visible 1
+			exp text ( locstring( "@MPUI_RECOMMENDEDPLAYERS" , maxrecommendedplayers( ) ) ) )  )
+		}
+		itemDef
+		{
+			rect -272 -42 272 18 3 3
+			style 1
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 1 1 1 0.15
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			background white
+			decoration 
+			type 0
+			align 0
+			textAlign 6
+			textAlignX 0
+			textAlignY 0
+			textScale 0.5833
+			textStyle 0
+			textFont 9
+			feeder 0
+			visible 1
+			dvar "party_lobbyPlayerCount"
+		}
+	}
+}	
