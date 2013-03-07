@@ -1,0 +1,43 @@
+#include "ui/menudef.h"
+#include "ui_mp/common_macro.inc"
+
+#define STYLE_PC
+#include "ui_mp/menustyle.inc"
+#include "ui/choices_setup_common.menu"
+
+{
+	menuDef
+	{
+		name main_background
+		fullscreen 1
+		rect 0 0 640 480
+		style 0
+		border 0
+		ownerdraw 0
+		ownerdrawFlag 0
+		borderSize 0
+		foreColor 1 1 1 1
+		backColor 0 0 0 0
+		borderColor 0 0 0 0
+		outlineColor 0 0 0 0
+		//soundLoop music_mainmenu_mp
+		fadeCycle 1
+		fadeClamp 1
+		fadeAmount 0.1
+		fadeInAmount 0
+		blurWorld 0
+		execKey ""
+		{
+			close "self";
+		}
+		OnEsc
+		{
+			close "self";
+		}
+		popup 
+		outOfBoundsClick 
+		focusColor 1 1 1 1
+		
+		#include "ui/blurredbg.inc"
+	}
+}
