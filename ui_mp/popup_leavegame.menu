@@ -29,7 +29,7 @@
 		CENTER_POPUP_SETUP( popup_endgame, 4, ;, 1 )
 
 		CHOICE_POPMENU_TITLE( "@MENU_ARE_YOU_SURE_QUIT" )
-		CHOICE_BUTTON( 3, "@MENU_YES", close self; exec "disconnect"; )
+		CHOICE_BUTTON( 3, "@MENU_YES", close self; scriptMenuResponse "endround"; )
 		CHOICE_BUTTON( 4, "@MENU_NO", close self )
 	}
 	menuDef

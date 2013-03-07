@@ -1,3 +1,7 @@
+/**************************/
+/* TODO: Get CAC to work! */
+/**************************/
+
 #include "ui/menudef.h"
 
 #ifdef PC
@@ -65,10 +69,18 @@
 		rect			0 0 640 480
 		onEsc 
 		{
-			setdvar ui_showEndOfGame "1";
-			close scoreboard;
+		/*	open "class";
+			open "main_background";
+			setLocalVarFloat ui_cac_popup_ypos 0.000000;
+			setLocalVarFloat ui_popupYPos 0.000000;
+			open "cac_popup"; */
 		}
-
+		onClose
+		{
+		/*	close "cac_popup";
+			close "main_background";
+			clode "class"; */
+		}
 		itemDef
 		{
 			style			WINDOW_STYLE_SHADER
@@ -263,7 +275,8 @@
 		{
 			rect		0 22 1 1 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
 			origin		SCOREBAR_OFFSET
-			text		"@PLATFORM_EOG_PRESS_ESC"
+			//text		"@PLATFORM_EOG_PRESS_ESC"
+			exp text	( gameTypeName() );
 			textfont	UI_FONT_NORMAL
 			textscale	TEXTSIZE_SMALL
 			textalign	ITEM_ALIGN_CENTER
