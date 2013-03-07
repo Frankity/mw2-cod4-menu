@@ -1,7 +1,5 @@
 #include "ui/menudef.h"
 #include "ui_mp/common_macro.inc"
-
-#define STYLE_PC
 #include "ui_mp/menustyle.inc"
 #include "ui/choices_setup_common.menu"
 
@@ -33,7 +31,6 @@
 		OnEsc
 		{
 			close "self";
-			close "class";
 		}
 		popup 
 		outOfBoundsClick 
