@@ -69,17 +69,15 @@
 		rect			0 0 640 480
 		onEsc 
 		{
-			open "class";
-			open "main_background";
+		/*	open "main_background";
 			setLocalVarFloat ui_cac_popup_ypos 0.000000;
 			setLocalVarFloat ui_popupYPos 0.000000;
-			open "cac_popup"; 
+			open "cac_popup"; */
 		}
 		onClose
 		{
-			close "cac_popup";
-			close "main_background";
-			clode "class"; 
+		/*	close "cac_popup";
+			close "main_background"; */
 		}
 		itemDef
 		{
@@ -275,8 +273,8 @@
 		{
 			rect		0 22 1 1 HORIZONTAL_ALIGN_CENTER VERTICAL_ALIGN_TOP
 			origin		SCOREBAR_OFFSET
-			text		"@PLATFORM_EOG_PRESS_ESC"
-			//exp text	( gameTypeName() );
+			//text		"@PLATFORM_EOG_PRESS_ESC"
+			exp text	( gameTypeName() );
 			textfont	UI_FONT_NORMAL
 			textscale	TEXTSIZE_SMALL
 			textalign	ITEM_ALIGN_CENTER
