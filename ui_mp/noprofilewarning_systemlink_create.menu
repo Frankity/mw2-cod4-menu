@@ -33,6 +33,7 @@
 		OnEsc
 		{
 			close "self";
+			close "class";
 		}
 		popup 
 		outOfBoundsClick 
