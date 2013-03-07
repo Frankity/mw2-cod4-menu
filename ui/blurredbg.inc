@@ -1,6 +1,7 @@
 #undef FOG_SCROLL_TIME
 #define FOG_SCROLL_TIME 60000 //30000
 
+//#define DO_THE_BLUE_MENU //Uncomment if you want the blue menu
 itemDef
 {
 	style			WINDOW_STYLE_SHADER
@@ -32,6 +33,65 @@ itemDef
 	decoration
 }
 
+#ifdef DO_THE_BLUE_MENU
+		itemDef
+		{
+			rect 0 0 640 480 4 4
+			style 3
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 0 150 250 0
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			origin 0 0
+			background mockup_bg_glow
+			decoration 
+			type 0
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 0
+			textScale 0.55
+			textStyle 0
+			textFont 0
+			feeder 0
+			exp forecolor a ( ( ( sin ( milliseconds( ) / 1500 ) + 1 ) * 0.250000 ) + 0.250000  )
+			visible			when( dvarString( fs_game ) == "" && dvarInt( cl_ingame ) != 1 );
+			visible 1
+		}
+		itemDef
+		{
+			rect 0 0 640 480 4 4
+			style 3
+			border 0
+			ownerdraw 0
+			ownerdrawFlag 0
+			borderSize 0
+			foreColor 0 150 250 0
+			backColor 0 0 0 0
+			borderColor 0 0 0 0
+			outlineColor 0 0 0 0
+			origin 0 0
+			background mockup_bg_glow
+			decoration 
+			type 0
+			align 0
+			textAlign 0
+			textAlignX 0
+			textAlignY 0
+			textScale 0.55
+			textStyle 0
+			textFont 0
+			feeder 0
+			text "(null)"
+			visible			when( dvarString( fs_game ) == "" && dvarInt( cl_ingame ) != 1 );
+			visible 1
+			exp forecolor a ( ( ( sin ( milliseconds( ) / 480 ) + 1 ) * 0.250000 ) + 0.250000  )
+		}
+#endif
 
 itemDef
 {
