@@ -20,6 +20,8 @@
 	#define ALLIES_HAVE_UAV (dvarint( ui_uav_allies ) && team( name ) == "TEAM_ALLIES" )
 	#define AXIS_HAVE_UAV (dvarint( ui_uav_axis ) && team( name ) == "TEAM_AXIS" )
 	#define CLIENT_HAS_UAV (dvarint( ui_uav_client ) && team( name ) == "TEAM_FREE" )
+	#define HAS_UAV ( ALLIES_HAVE_UAV && AXIS_HAVE_UAV && CLIENT_HAS_UAV )
+	
 	
 	#define HORIZONTAL_ALIGN_LEFT 8
 	#define VERTICAL_ALIGN_TOP 8
@@ -40,7 +42,7 @@
  	   	fullScreen		0
 		hiddenDuringFlashbang
 		hiddenDuringScope
-		visible 		when ( !inkillcam() && !flashbanged() && !ui_active() && !scoped() && (dvarString( createfx ) != "on") && (dvarint( ui_hud_hardcore ) == 0 || ALLIES_HAVE_UAV || AXIS_HAVE_UAV || CLIENT_HAS_UAV || dvarInt( g_compassShowEnemies ) ) && NOT_SPECTATING );
+		visible 		when ( !isempjammed( ) && !inkillcam() && !flashbanged() && !ui_active() && !scoped() && (dvarString( createfx ) != "on") && (dvarint( ui_hud_hardcore ) == 0 || HAS_UAV || dvarInt( g_compassShowEnemies ) ) && NOT_SPECTATING );
  
 		itemDef
 		{
@@ -86,18 +88,6 @@
 			visible when ( !selecting_location() );
 			decoration
  	   	}     
-		// Objective pointers
-		itemDef
-		{
-			name			"compasspointers"
-			rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
-	 	   	origin 			MINIMAP_ORIGIN
-			forecolor		1 1 1 1
-			background		"objective_line"
-			ownerdraw		CG_PLAYER_COMPASS_POINTERS
-			visible when ( !selecting_location() && dvarint( ui_hud_showobjicons ) > 0 );
-			decoration
-		}
 		itemDef
 		{
 			name "minimap_friendlies"
