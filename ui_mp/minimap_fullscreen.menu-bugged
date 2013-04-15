@@ -1,0 +1,232 @@
+#include "ui/menudef.h"
+
+#define TEAM_IS_MARINES		(localVarString( ui_team ) == "marines")
+#define TEAM_IS_OPFOR		(localVarString( ui_team ) == "opfor")
+
+#define RANK_ORIGIN 0 6
+#define ONLINEGAME (dvarInt( "onlinegame" ) && !dvarInt( "xblive_privatematch" ) )
+#define ONLINEGAME_OFFSET 10
+
+#define FLASH_OFS 	((sin(milliseconds()/90))*2)
+#define FLASH_OFS2 	((sin(milliseconds()/90))*4)
+
+#define HUD_ALPHA 0.65
+#define HUD_FOREGROUND_ALPHA 0.75
+#define DPAD_ICON_ALPHA 0.65
+
+#define NOT_SPECTATING (!spectatingClient())
+
+{
+	#define ALLIES_HAVE_UAV (dvarint( ui_uav_allies ) && team( name ) == "TEAM_ALLIES" )
+	#define AXIS_HAVE_UAV (dvarint( ui_uav_axis ) && team( name ) == "TEAM_AXIS" )
+	#define CLIENT_HAS_UAV (dvarint( ui_uav_client ) && team( name ) == "TEAM_FREE" )
+	#define HAS_UAV ( ALLIES_HAVE_UAV && AXIS_HAVE_UAV && CLIENT_HAS_UAV )
+	
+	
+	#define HORIZONTAL_ALIGN_LEFT 8
+	#define VERTICAL_ALIGN_TOP 8
+	
+	#define RECT_COMPASS	0 0 COMPASS_SIZE_MP COMPASS_SIZE_MP HORIZONTAL_ALIGN_LEFT VERTICAL_ALIGN_TOP
+	/*#define MINIMAP_Y_MP 8
+	#define MINIMAP_X_MP 8
+	#define MINIMAP_W_MP 100
+	#define MINIMAP_H_MP 100*/
+	#undef MINIMAP_ORIGIN
+	#define MINIMAP_ORIGIN 	6 6 //2 2
+	
+	// Compass
+	menuDef
+	{
+		name			"minimap_fullscreen"
+ 	   	rect			RECT_COMPASS
+ 	   	fullScreen		0
+		hiddenDuringFlashbang
+		hiddenDuringScope
+		visible 		when ( !isempjammed( ) && !inkillcam() && !flashbanged() && !ui_active() && !scoped() && (dvarString( createfx ) != "on") && (dvarint( ui_hud_hardcore ) == 0 || HAS_UAV || dvarInt( g_compassShowEnemies ) ) && NOT_SPECTATING );
+ 
+		itemDef
+		{
+			name			"minimapBG"
+			rect			(MINIMAP_X_MP - 14) (MINIMAP_Y_MP - 6) COMPASS_SIZE_MP COMPASS_SIZE_MP
+	 	   	origin 			MINIMAP_ORIGIN
+			forecolor		1 1 1 1
+			background		"minimap_background"
+			ownerdraw		CG_PLAYER_COMPASS_BACK
+			visible when ( !selecting_location() );
+			decoration
+		}
+		itemDef
+        {
+            name			"minimapTickerBorder"
+            rect			MINIMAP_X_MP (MINIMAP_Y_MP - 15) MINIMAP_W_MP 14
+	 	   	origin 			MINIMAP_ORIGIN
+            forecolor		1 1 1 1
+            background		"weapon_aks74u"
+            ownerdraw		CG_PLAYER_COMPASS_BACK
+			visible when ( !selecting_location() );
+			decoration
+        }
+		itemDef
+        {
+            name			"minimapTicker"
+            rect			MINIMAP_X_MP (MINIMAP_Y_MP - 12) MINIMAP_W_MP 9
+	 	   	origin 			MINIMAP_ORIGIN
+            forecolor		1 1 1 1
+            background		"weapon_g3"
+            ownerdraw		CG_PLAYER_COMPASS_TICKERTAPE_NO_OBJ
+			visible when ( !selecting_location() );
+			decoration
+        }
+		itemDef
+ 	   	{
+			name			"mini_map"
+			rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
+	 	   	origin 			MINIMAP_ORIGIN
+			forecolor		1 1 1 1
+			background		"compass_map_default"
+			ownerdraw		CG_PLAYER_COMPASS_MAP
+			visible when ( !selecting_location() );
+			decoration
+ 	   	}     
+		itemDef
+		{
+			name "minimap_friendlies"
+			rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
+	 	   	origin 			MINIMAP_ORIGIN
+			ownerdraw 158
+			visible 1
+			forecolor 1 1 1 1
+			type 8
+			textscale 0.55
+			exp forecolor a ( 1 - radarjamintensity( ) )
+		}
+		itemDef
+		{
+			name "minimap_objectives"
+			rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
+	 	   	origin 			MINIMAP_ORIGIN
+			ownerdraw 152
+			visible 1
+			forecolor 1 1 1 1
+			background "objective_line"
+			type 8
+			textscale 0.55
+		}
+		itemDef
+		{
+			name "minimap_enemies"
+			rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
+	 	   	origin 			MINIMAP_ORIGIN
+			ownerdraw 175
+			visible 1
+			forecolor 1 1 1 1
+			type 8
+			textscale 0.55
+			exp forecolor a ( 1 - radarjamintensity( ) )
+		}
+		itemDef
+		{
+			name "minimap_vehicles"
+			rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
+	 	   	origin 			MINIMAP_ORIGIN
+			ownerdraw 155
+			visible 1
+			forecolor 1 1 1 1
+			type 8
+			textscale 0.55
+			exp forecolor a ( 1 - radarjamintensity( ) )
+		}
+		itemDef
+		{
+			name "minimap_planes"
+			rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
+	 	   	origin 			MINIMAP_ORIGIN
+			ownerdraw 156
+			visible 1
+			forecolor 1 1 1 1
+			type 8
+			textscale 0.55
+			exp forecolor a ( 1 - radarjamintensity( ) )
+		}
+		itemDef
+		{
+			name "minimap_sentries"
+			rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
+	 	   	origin 			MINIMAP_ORIGIN
+			ownerdraw 165
+			visible 1
+			forecolor 1 1 1 1
+			type 8
+			textscale 0.55
+			exp forecolor a ( 1 - radarjamintensity( ) )
+		}
+		itemDef
+		{
+			name "minimap_player"
+			rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
+	 	   	origin 			MINIMAP_ORIGIN
+			ownerdraw 150
+			visible 1
+			forecolor 1 1 1 1
+			background "compassping_player"
+			type 8
+			textscale 0.55
+			exp forecolor a ( 1 - radarjamintensity( ) )
+		}
+		itemDef
+		{
+			rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
+	 	   	origin 			MINIMAP_ORIGIN
+			style 3
+			visible 1
+			forecolor 0.64 0.74 0.71 1
+			background "white"
+			textscale 0.55
+			exp forecolor a ( radarjamintensity( ) )
+			visible when ( radarisjammed( ) )
+		}
+		itemDef
+		{
+			rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
+	 	   	origin 			MINIMAP_ORIGIN
+			style 3
+			visible 1
+			forecolor 0.89 0.98 0.95 1
+			background "ac130_overlay_grain"
+			textscale 0.55
+			exp forecolor a ( radarjamintensity( ) )
+			visible when ( radarisjammed( ) )
+		}
+		itemDef
+		{
+			rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
+	 	   	origin 			MINIMAP_ORIGIN
+			style 3
+			visible 1
+			forecolor 1 1 1 1
+			background "stencil_base"
+			textscale 0.55
+		}
+		itemDef
+		{
+			rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
+	 	   	origin 			MINIMAP_ORIGIN
+			style 3
+			visible 1
+			forecolor 1 1 1 1
+			background "scanlines_stencil"
+			textscale 0.55
+			exp rect y ( ( 0 - 100 ) + ( ( 100 * 2 ) * ( 1 - ( ( milliseconds( ) % 4000 ) / 4000 ) ) ) )
+		}
+		itemDef
+		{
+			rect			MINIMAP_X_MP MINIMAP_Y_MP MINIMAP_W_MP MINIMAP_H_MP
+	 	   	origin 			MINIMAP_ORIGIN
+			style 3
+			visible 1
+			forecolor 0.89 0.98 0.95 1
+			background "stencil_fill"
+			textscale 0.55
+		}
+	}
+}
