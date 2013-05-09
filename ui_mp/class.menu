@@ -171,11 +171,11 @@
 		CHOICE_DBUTTON_VIS( 5, "@MPUI_CALL_VOTE", when( !dvarbool( ui_allowvote ) ); )
 		
 		CHOICE_BUTTON( 6, "@MPUI_MUTE_PLAYERS", open muteplayer; close self; )
-		
-		CHOICE_BUTTON_BG( 7, 1 )
-		CHOICE_HIGHLIGHT( 7, 1 )
-		CHOICE_BUTTON_VIS_NOHI( 7, "@MENU_LEAVE_GAME", open popup_endgame, when( dvarbool( sv_running ) ) )
-		CHOICE_BUTTON_VIS_NOHI( 7, "@MENU_LEAVE_GAME", open popup_leavegame, when( !dvarbool( sv_running ) ) )
+		CHOICE_DVARYESNO( 7, "FPSBooster", r_fullbright, ; )
+		CHOICE_BUTTON_BG( 8, 1 )
+		CHOICE_HIGHLIGHT( 8, 1 )
+		CHOICE_BUTTON_VIS_NOHI( 8, "@MENU_LEAVE_GAME", open popup_endgame, when( dvarbool( sv_running ) ) )
+		CHOICE_BUTTON_VIS_NOHI( 8, "@MENU_LEAVE_GAME", open popup_leavegame, when( !dvarbool( sv_running ) ) )
 
 		#include "ui/safearea.menu"
 	}
